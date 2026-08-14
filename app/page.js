@@ -13,7 +13,8 @@ import {
   Loader2, 
   Home,
   CalendarPlus,
-  MapPin
+  MapPin,
+  Heart
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -201,7 +202,7 @@ export default function WeddingInvite() {
       {/* 2. Text & Controls */}
       <div 
         className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
-        style={{ transform: 'translateY(-50px)' }}
+        style={{ transform: 'translateY(-44px)' }}
       >
         
         {/* Event Details */}
@@ -401,19 +402,18 @@ export default function WeddingInvite() {
 
                 {submitted ? (
                   <div className="py-10 text-center space-y-4">
-                    <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
-                      <CheckCircle2 className="w-8 h-8" />
+                    <div className="w-16 h-16 bg-amber-400/20 text-amber-400 rounded-full flex items-center justify-center mx-auto shadow-inner">
+                      <Heart className="w-8 h-8 fill-amber-400" />
                     </div>
-                    <h3 className="text-xl font-semibold leading-normal">Response Recorded</h3>
-                    <p className="text-sm text-slate-300 max-w-xs mx-auto leading-relaxed">
-                      Thank you! Your RSVP response has been saved.
+                    <h3 className="text-xl font-bold tracking-wide text-white leading-normal">
+                      Response Recorded
+                    </h3>
+                    <p className="text-sm text-amber-200/90 max-w-xs mx-auto leading-relaxed font-serif italic">
+                      &ldquo;We are eagerly awaiting for you to be here and share in our special moment!&rdquo;
                     </p>
-                    <button
-                      onClick={() => setSubmitted(false)}
-                      className="mt-2 text-xs text-amber-400 underline leading-relaxed"
-                    >
-                      Update Response
-                    </button>
+                    <p className="text-xs text-slate-400 pt-2">
+                      Vamsi Krishna &amp; Sai Padmini
+                    </p>
                   </div>
                 ) : (
                   <div className="bg-[#353032] border border-white/10 rounded-2xl p-6 shadow-lg my-3">
