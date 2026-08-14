@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CheckCircle2, 
@@ -12,12 +12,21 @@ import {
   Send, 
   Loader2, 
   Home,
-  CalendarPlus
+  CalendarPlus,
+  MapPin
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-// Connected Google Form Action URL
+// 1. Google Form Submission Endpoint
 const FORM_ENDPOINT = 'https://docs.google.com/forms/u/0/d/e/1FAIpQLSd0xUk_QkWIsXeWfZ2L0PuFc57OSQBGp6fQLjUOcFCnQTpClQ/formResponse';
+
+// 2. Live GViz Query Endpoint (Instant real-time sync)
+const SPREADSHEET_ID = '1-6OOG3c8HRWZB1A1j77xscFDrr3kWm8vv12BXOpWfEM';
+const SHEET_NAME = 'Form Responses 1';
+const CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(SHEET_NAME)}`;
+
+// 3. Google Maps Link
+const GOOGLE_MAPS_URL = 'https://www.google.com/maps/search/?api=1&query=The+Bliss+at+Aubrey';
 
 export default function WeddingInvite() {
   const [status, setStatus] = useState('Going');
@@ -25,17 +34,97 @@ export default function WeddingInvite() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Live Guest Counts State
+  const [counts, setCounts] = useState({ going: 0, notGoing: 0, maybe: 0, loading: true });
+
+  // Helper to parse CSV rows correctly handling quoted strings
+  const parseCsvRow = (text) => {
+    const result = [];
+    let cell = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
+      if (char === '"') {
+        inQuotes = !inQuotes;
+      } else if (char === ',' && !inQuotes) {
+        result.push(cell.trim());
+        cell = '';
+      } else {
+        cell += char;
+      }
+    }
+    result.push(cell.trim());
+    return result;
+  };
+
+  // Helper to extract clean integer numbers
+  const parseGuestNumber = (val) => {
+    if (!val) return 0;
+    const cleanVal = val.replace(/"/g, '').trim();
+    const match = cleanVal.match(/\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+  };
+
+  // Fetch and sum live guest numbers directly from sheet columns
+  const fetchLiveCounts = async () => {
+    try {
+      const cacheBustingUrl = `${CSV_URL}&_t=${Date.now()}`;
+      const res = await fetch(cacheBustingUrl, { cache: 'no-store' });
+      const csvText = await res.text();
+      
+      const lines = csvText.split(/\r?\n/).filter(line => line.trim() !== '');
+      if (lines.length < 2) {
+        setCounts({ going: 0, notGoing: 0, maybe: 0, loading: false });
+        return;
+      }
+
+      let goingTotal = 0;
+      let notGoingTotal = 0;
+      let maybeTotal = 0;
+
+      // Skip row 0 (headers) and iterate through response rows
+      for (let i = 1; i < lines.length; i++) {
+        const cols = parseCsvRow(lines[i]);
+        
+        const rawStatus = cols[1] ? cols[1].replace(/"/g, '').trim().toLowerCase() : '';
+        const rawGuests = cols[3] ? cols[3] : '0';
+
+        if (rawStatus.includes('not going') || rawStatus === 'not') {
+          notGoingTotal += 1;
+        } else if (rawStatus.includes('maybe')) {
+          maybeTotal += parseGuestNumber(rawGuests);
+        } else if (rawStatus.includes('going')) {
+          goingTotal += parseGuestNumber(rawGuests);
+        }
+      }
+
+      setCounts({
+        going: goingTotal,
+        notGoing: notGoingTotal,
+        maybe: maybeTotal,
+        loading: false
+      });
+    } catch (err) {
+      console.error('Failed to fetch live guest counts:', err);
+      setCounts((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
+  useEffect(() => {
+    fetchLiveCounts();
+  }, []);
+
   const handleStatusSelect = (selectedStatus) => {
     setStatus(selectedStatus);
     setActiveModal('rsvp');
   };
 
-  // Helper to add event directly to iPhone (iOS) or Android Calendar
   const handleAddToCalendar = () => {
     const event = {
       title: "Vamsi Krishna & Sai Padmini's Wedding",
       description: "We warmly invite you to celebrate the Wedding Ceremony of Vamsi Krishna Chinthala & Sai Padmini Papineni.",
-      location: "1212 Arrowwood Dr, Aubrey, TX",
+      location: "The Bliss at Aubrey, 4381 US-377, Aubrey, TX 76227",
       startTime: "20260829T214500", // Aug 29, 2026, 9:45 PM
       endTime: "20260830T010000"     // Aug 30, 2026, 1:00 AM
     };
@@ -88,6 +177,11 @@ export default function WeddingInvite() {
       }
 
       setSubmitted(true);
+      
+      // Instantly refresh live counts after form submission
+      setTimeout(() => {
+        fetchLiveCounts();
+      }, 800);
     } catch (err) {
       console.error('Submission error:', err);
     } finally {
@@ -123,7 +217,7 @@ export default function WeddingInvite() {
             Sat, August 29 at 9:45 PM
           </p>
           <p className="text-[11px] font-medium text-slate-500 leading-relaxed">
-            Aubrey, Texas
+            The Bliss at Aubrey, Texas
           </p>
         </div>
 
@@ -203,7 +297,7 @@ export default function WeddingInvite() {
                 transition={{ type: 'spring', damping: 26, stiffness: 220 }}
                 className="fixed bottom-0 inset-x-0 bg-[#252223] text-white rounded-t-[36px] p-5 sm:p-7 max-w-md mx-auto z-40 border-t border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
               >
-                {/* Top Actions Bar (Home + Calendar) */}
+                {/* Top Actions Bar */}
                 <div className="flex items-center justify-between pb-4">
                   <button 
                     onClick={() => setActiveModal(null)}
@@ -212,7 +306,6 @@ export default function WeddingInvite() {
                     <Home className="w-4 h-4" />
                   </button>
                   
-                  {/* Add to Calendar Button */}
                   <button 
                     onClick={handleAddToCalendar}
                     title="Add to Calendar"
@@ -231,7 +324,11 @@ export default function WeddingInvite() {
                   <div>
                     <h3 className="text-base font-bold text-white tracking-wide">Guest List</h3>
                     <p className="text-xs text-rose-100/80 font-medium pt-0.5">
-                      102 Going &bull; 1 Not Going &bull; 4 Maybe
+                      {counts.loading ? (
+                        'Updating guest counts...'
+                      ) : (
+                        `${counts.going} Going \u2022 ${counts.notGoing} Not Going \u2022 ${counts.maybe} Maybe`
+                      )}
                     </p>
                   </div>
                 </div>
@@ -256,10 +353,20 @@ export default function WeddingInvite() {
                   <p className="text-xs font-semibold text-slate-200">
                     On Saturday, August 29, 2026 9:45 PM
                   </p>
-                  <div className="pt-2 text-xs text-slate-300 space-y-0.5">
+
+                  {/* Venue Link to Google Maps */}
+                  <div className="pt-2 text-xs text-slate-300 space-y-1">
                     <p className="font-semibold text-white">Venue:</p>
-                    <p>1212 Arrowwood Dr</p>
-                    <p>Aubrey, TX</p>
+                    <a
+                      href={GOOGLE_MAPS_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-1.5 text-amber-300 hover:text-amber-200 underline font-semibold transition-colors"
+                    >
+                      <MapPin className="w-3.5 h-3.5 shrink-0 text-amber-400" />
+                      <span>The Bliss at Aubrey</span>
+                    </a>
+                    <p className="text-[11px] text-slate-400">4381 US-377, Aubrey, TX 76227</p>
                   </div>
                 </div>
 
@@ -282,7 +389,7 @@ export default function WeddingInvite() {
                 transition={{ type: 'spring', damping: 26, stiffness: 220 }}
                 className="fixed bottom-0 inset-x-0 bg-[#252223] text-white rounded-t-[36px] p-5 sm:p-7 max-w-md mx-auto z-40 border-t border-white/10 shadow-2xl max-h-[90vh] overflow-y-auto"
               >
-                {/* Top Actions Bar (Home Only) */}
+                {/* Top Actions Bar */}
                 <div className="flex items-center justify-between pb-4">
                   <button 
                     onClick={() => setActiveModal(null)}
@@ -309,7 +416,6 @@ export default function WeddingInvite() {
                     </button>
                   </div>
                 ) : (
-                  /* Form Wrapped in Dark Styling Card */
                   <div className="bg-[#353032] border border-white/10 rounded-2xl p-6 shadow-lg my-3">
                     <form onSubmit={handleSubmit} className="space-y-4">
                       
@@ -332,7 +438,7 @@ export default function WeddingInvite() {
                         />
                       </div>
 
-                      {/* Number of Guests Input (Sends hidden "0" when "Not Going") */}
+                      {/* Number of Guests Input */}
                       {status !== 'Not Going' ? (
                         <div className="relative">
                           <Users className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -348,7 +454,7 @@ export default function WeddingInvite() {
                             <option value="3">3 People</option>
                             <option value="4">4 People</option>
                             <option value="5">5 People</option>
-                            <option value="10+">10+ People</option>
+                            <option value="10">10 People</option>
                           </select>
                         </div>
                       ) : (
