@@ -68,30 +68,33 @@ export default function WeddingInvite() {
         style={{ backgroundImage: "url('/bg.png')" }}
       />
 
-      {/* 2. Text & Controls Anchored in the Lower Half */}
-      <div className="relative z-10 w-full max-w-md mx-auto px-6 pb-8 sm:pb-12 flex flex-col items-center text-center space-y-3 bg-gradient-to-t from-[#e5eff7] via-[#e5eff7]/95 via-70% to-transparent pt-12">
+      {/* 2. Text & Controls - Expanded Spacing & Line Height */}
+      <div 
+        className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
+        style={{ transform: 'translateY(-100px)' }}
+      >
         
-        {/* Event Details */}
-        <div className="space-y-0.5">
-          <p className="text-xs uppercase tracking-[0.2em] font-bold text-amber-800">
+        {/* Event Details with relaxed line height */}
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-[0.25em] font-bold text-amber-800 leading-relaxed">
             You&apos;re Invited
           </p>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 leading-snug">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-slate-900 leading-normal">
             Vamsi Krishna &amp; Sai Padmini
           </h1>
-          <p className="text-xs font-semibold text-slate-700 pt-0.5">
+          <p className="text-xs font-semibold text-slate-700 leading-relaxed pt-1">
             Sat, August 29 at 9:45 PM
           </p>
-          <p className="text-[11px] font-medium text-slate-500">
+          <p className="text-[11px] font-medium text-slate-500 leading-relaxed">
             Aubrey, Texas
           </p>
         </div>
 
-        {/* Segmented RSVP Pill Bar */}
-        <div className="w-full bg-[#3d454e] backdrop-blur-md rounded-full p-1.5 border border-white/20 flex items-center justify-between shadow-xl mt-1">
+        {/* Segmented RSVP Pill Bar with increased padding */}
+        <div className="w-full bg-[#3d454e] backdrop-blur-md rounded-full p-2 border border-white/20 flex items-center justify-between shadow-xl">
           <button
             onClick={() => handleStatusSelect('Going')}
-            className={`flex-1 py-2.5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all leading-relaxed ${
               status === 'Going' && isDrawerOpen
                 ? 'bg-white text-slate-900 shadow-md font-bold'
                 : 'text-slate-100 hover:text-white'
@@ -101,11 +104,11 @@ export default function WeddingInvite() {
             <span>Going</span>
           </button>
 
-          <div className="w-[1px] h-5 bg-white/20" />
+          <div className="w-[1px] h-6 bg-white/20" />
 
           <button
             onClick={() => handleStatusSelect('Not Going')}
-            className={`flex-1 py-2.5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all leading-relaxed ${
               status === 'Not Going' && isDrawerOpen
                 ? 'bg-white text-slate-900 shadow-md font-bold'
                 : 'text-slate-100 hover:text-white'
@@ -115,11 +118,11 @@ export default function WeddingInvite() {
             <span>Not Going</span>
           </button>
 
-          <div className="w-[1px] h-5 bg-white/20" />
+          <div className="w-[1px] h-6 bg-white/20" />
 
           <button
             onClick={() => handleStatusSelect('Maybe')}
-            className={`flex-1 py-2.5 rounded-full text-xs font-semibold flex items-center justify-center gap-1.5 transition-all ${
+            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all leading-relaxed ${
               status === 'Maybe' && isDrawerOpen
                 ? 'bg-white text-slate-900 shadow-md font-bold'
                 : 'text-slate-100 hover:text-white'
@@ -130,10 +133,10 @@ export default function WeddingInvite() {
           </button>
         </div>
 
-        {/* Action Button */}
+        {/* Action Button with increased padding */}
         <button
           onClick={() => setIsDrawerOpen(true)}
-          className="w-full py-3 bg-[#4c545e] hover:bg-[#5b646d] text-white font-medium text-xs rounded-2xl transition-all shadow-md"
+          className="w-full py-3.5 bg-[#4c545e] hover:bg-[#5b646d] text-white font-medium text-xs sm:text-sm rounded-2xl transition-all shadow-md leading-relaxed"
         >
           View Event Details &amp; RSVP
         </button>
@@ -161,8 +164,8 @@ export default function WeddingInvite() {
             >
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div>
-                  <h2 className="text-xl font-bold">Event Registration</h2>
-                  <p className="text-xs text-slate-400">Vamsi Krishna &amp; Sai Padmini&apos;s Wedding</p>
+                  <h2 className="text-xl font-bold leading-normal">Event Registration</h2>
+                  <p className="text-xs text-slate-400 leading-relaxed mt-0.5">Vamsi Krishna &amp; Sai Padmini&apos;s Wedding</p>
                 </div>
                 <button 
                   onClick={() => setIsDrawerOpen(false)}
@@ -177,22 +180,22 @@ export default function WeddingInvite() {
                   <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="text-xl font-semibold">Response Recorded</h3>
-                  <p className="text-sm text-slate-300 max-w-xs mx-auto">
+                  <h3 className="text-xl font-semibold leading-normal">Response Recorded</h3>
+                  <p className="text-sm text-slate-300 max-w-xs mx-auto leading-relaxed">
                     Thank you! Your RSVP response has been saved.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="mt-2 text-xs text-amber-400 underline"
+                    className="mt-2 text-xs text-amber-400 underline leading-relaxed"
                   >
                     Update Response
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                  <div className="p-3 bg-white/5 rounded-xl border border-white/10 flex items-center justify-between">
-                    <span className="text-xs text-slate-400">Selected RSVP Status:</span>
-                    <span className="text-sm font-semibold text-amber-400">{status}</span>
+                <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+                  <div className="p-3.5 bg-white/5 rounded-xl border border-white/10 flex items-center justify-between">
+                    <span className="text-xs text-slate-400 leading-relaxed">Selected RSVP Status:</span>
+                    <span className="text-sm font-semibold text-amber-400 leading-relaxed">{status}</span>
                   </div>
                   <input type="hidden" name="entry.123456789_status" value={status} />
 
@@ -203,7 +206,7 @@ export default function WeddingInvite() {
                       name="entry.123456789_name"
                       required
                       placeholder="Full Name *"
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400"
+                      className="w-full pl-10 pr-4 py-3.5 bg-white/10 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 leading-relaxed"
                     />
                   </div>
 
@@ -214,7 +217,7 @@ export default function WeddingInvite() {
                       name="entry.123456789_email"
                       required
                       placeholder="Email Address *"
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400"
+                      className="w-full pl-10 pr-4 py-3.5 bg-white/10 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 leading-relaxed"
                     />
                   </div>
 
@@ -223,7 +226,7 @@ export default function WeddingInvite() {
                       <Users className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                       <select
                         name="entry.123456789_guests"
-                        className="w-full pl-10 pr-4 py-3 bg-[#2b3138] border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white appearance-none"
+                        className="w-full pl-10 pr-4 py-3.5 bg-[#2b3138] border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white appearance-none leading-relaxed"
                       >
                         <option value="1">1 Person</option>
                         <option value="2">2 People</option>
@@ -245,14 +248,14 @@ export default function WeddingInvite() {
                       name="entry.123456789_notes"
                       rows={3}
                       placeholder="Special notes or dietary requirements..."
-                      className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 resize-none"
+                      className="w-full pl-10 pr-4 py-3.5 bg-white/10 border border-white/10 rounded-xl text-sm focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 resize-none leading-relaxed"
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 bg-amber-400 hover:bg-amber-500 text-slate-950 font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-70 mt-4"
+                    className="w-full py-4 bg-amber-400 hover:bg-amber-500 text-slate-950 font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-70 mt-4 leading-relaxed"
                   >
                     {isSubmitting ? (
                       <>
