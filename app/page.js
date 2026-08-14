@@ -68,19 +68,20 @@ export default function WeddingInvite() {
         style={{ backgroundImage: "url('/bg.png')" }}
       />
 
-      {/* 2. Text & Controls - Expanded Spacing & Line Height */}
+      {/* 2. Text & Controls */}
       <div 
         className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
-        style={{ transform: 'translateY(-80px)' }}
+        style={{ transform: 'translateY(-70px)' }}
       >
         
-        {/* Event Details with relaxed line height */}
+        {/* Event Details */}
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-[0.25em] font-bold text-amber-800 leading-relaxed">
             You&apos;re Invited
           </p>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-slate-900 leading-normal">
-            Vamsi Krishna &amp; Sai Padmini
+            Vamsi Krishna &amp; Sai Padmini&apos;s
+            <span className="block">Wedding</span>
           </h1>
           <p className="text-xs font-semibold text-slate-700 leading-relaxed pt-1">
             Sat, August 29 at 9:45 PM
@@ -90,7 +91,7 @@ export default function WeddingInvite() {
           </p>
         </div>
 
-        {/* Segmented RSVP Pill Bar with increased padding */}
+        {/* Segmented RSVP Pill Bar */}
         <div className="w-full bg-[#3d454e] backdrop-blur-md rounded-full p-2 border border-white/20 flex items-center justify-between shadow-xl">
           <button
             onClick={() => handleStatusSelect('Going')}
@@ -133,7 +134,7 @@ export default function WeddingInvite() {
           </button>
         </div>
 
-        {/* Action Button with increased padding */}
+        {/* Action Button */}
         <button
           onClick={() => setIsDrawerOpen(true)}
           className="w-full py-3.5 bg-[#4c545e] hover:bg-[#5b646d] text-white font-medium text-xs sm:text-sm rounded-2xl transition-all shadow-md leading-relaxed"
@@ -165,7 +166,9 @@ export default function WeddingInvite() {
               <div className="flex items-center justify-between pb-4 border-b border-white/10">
                 <div>
                   <h2 className="text-xl font-bold leading-normal">Event Registration</h2>
-                  <p className="text-xs text-slate-400 leading-relaxed mt-0.5">Vamsi Krishna &amp; Sai Padmini&apos;s Wedding</p>
+                  <p className="text-xs text-slate-400 leading-relaxed mt-0.5">
+                    Vamsi Krishna &amp; Sai Padmini&apos;s Wedding
+                  </p>
                 </div>
                 <button 
                   onClick={() => setIsDrawerOpen(false)}
