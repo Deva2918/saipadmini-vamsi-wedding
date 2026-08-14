@@ -84,7 +84,6 @@ export default function WeddingInvite() {
       let notGoingTotal = 0;
       let maybeTotal = 0;
 
-      // Skip row 0 (headers) and iterate through response rows
       for (let i = 1; i < lines.length; i++) {
         const cols = parseCsvRow(lines[i]);
         
@@ -178,8 +177,6 @@ export default function WeddingInvite() {
       }
 
       setSubmitted(true);
-      
-      // Instantly refresh live counts after form submission
       setTimeout(() => {
         fetchLiveCounts();
       }, 800);
@@ -202,7 +199,7 @@ export default function WeddingInvite() {
       {/* 2. Text & Controls */}
       <div 
         className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
-        style={{ transform: 'translateY(-44px)' }}
+        style={{ transform: 'translateY(-50px)' }}
       >
         
         {/* Event Details */}
@@ -426,7 +423,7 @@ export default function WeddingInvite() {
                       </div>
                       <input type="hidden" name="entry.1146164887" value={status} />
 
-                      {/* Full Name Input */}
+                      {/* Full Name Input (16px base font stops iPhone auto-zoom) */}
                       <div className="relative">
                         <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
@@ -434,11 +431,11 @@ export default function WeddingInvite() {
                           name="entry.1867410502"
                           required
                           placeholder="Full Name *"
-                          className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-xs focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 leading-relaxed"
+                          className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-base sm:text-xs focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 leading-relaxed"
                         />
                       </div>
 
-                      {/* Number of Guests Input */}
+                      {/* Number of Guests Input (16px base font stops iPhone auto-zoom) */}
                       {status !== 'Not Going' ? (
                         <div className="relative">
                           <Users className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -446,7 +443,7 @@ export default function WeddingInvite() {
                             name="entry.220456160"
                             required
                             defaultValue=""
-                            className="w-full pl-10 pr-4 py-3 bg-[#252223] border border-white/10 rounded-xl text-xs focus:outline-none focus:border-amber-400 text-white appearance-none leading-relaxed invalid:text-slate-400"
+                            className="w-full pl-10 pr-4 py-3 bg-[#252223] border border-white/10 rounded-xl text-base sm:text-xs focus:outline-none focus:border-amber-400 text-white appearance-none leading-relaxed invalid:text-slate-400"
                           >
                             <option value="" disabled hidden>Number of Guests *</option>
                             <option value="1">1 Person</option>
@@ -461,14 +458,14 @@ export default function WeddingInvite() {
                         <input type="hidden" name="entry.220456160" value="0" />
                       )}
 
-                      {/* Message Notes Input */}
+                      {/* Message Notes Input (16px base font stops iPhone auto-zoom) */}
                       <div className="relative">
                         <MessageSquare className="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400" />
                         <textarea
                           name="entry.657578493"
                           rows={3}
                           placeholder="Special notes or Blessings..."
-                          className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-xs focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 resize-none leading-relaxed"
+                          className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/10 rounded-xl text-base sm:text-xs focus:outline-none focus:border-amber-400 text-white placeholder:text-slate-400 resize-none leading-relaxed"
                         ></textarea>
                       </div>
 
