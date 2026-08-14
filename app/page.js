@@ -71,7 +71,7 @@ export default function WeddingInvite() {
       {/* 2. Text & Controls */}
       <div 
         className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
-        style={{ transform: 'translateY(-70px)' }}
+        style={{ transform: 'translateY(-50px)' }}
       >
         
         {/* Event Details */}
@@ -80,8 +80,7 @@ export default function WeddingInvite() {
             You&apos;re Invited
           </p>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-slate-900 leading-normal">
-            Vamsi Krishna &amp; Sai Padmini&apos;s
-            <span className="block">Wedding</span>
+            Vamsi Krishna &amp; Sai Padmini&apos;s Wedding
           </h1>
           <p className="text-xs font-semibold text-slate-700 leading-relaxed pt-1">
             Sat, August 29 at 9:45 PM
