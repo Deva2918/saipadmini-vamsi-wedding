@@ -71,7 +71,7 @@ export default function WeddingInvite() {
       {/* 2. Text & Controls - Expanded Spacing & Line Height */}
       <div 
         className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
-        style={{ transform: 'translateY(-100px)' }}
+        style={{ transform: 'translateY(-80px)' }}
       >
         
         {/* Event Details with relaxed line height */}
