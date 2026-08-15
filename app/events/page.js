@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   CheckCircle2, 
@@ -11,20 +11,20 @@ import {
   MessageSquare, 
   Send, 
   Loader2, 
-  Home,
-  CalendarPlus,
-  MapPin,
-  Heart,
-  Sun,
-  Sparkles,
-  Clock
+  Home, 
+  CalendarPlus, 
+  MapPin, 
+  Heart, 
+  Sun, 
+  Sparkles, 
+  Clock 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 // 1. Google Form Submission Endpoint
 const FORM_ENDPOINT = 'https://docs.google.com/forms/d/e/1FAIpQLSeu6-TZUOmw4P-Kvey4yzQgT03ggnWL2Bue0xLjYydAQ6Nu_g/formResponse';
 
-// 2. Events Google Sheet CSV URL (Updated for Events Form Sheet)
+// 2. Events Google Sheet CSV URL
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS168ea40QaGQwWRrRImmeUKay_FrvUOK5nuXtsFi84vzy06uwnJrkMCBnW-erchGNcWoZ69ORpXrxf/pub?gid=2093475087&single=true&output=csv';
 
 // 3. Google Maps URLs
@@ -37,8 +37,21 @@ export default function EventsInvite() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const videoRef = useRef(null);
+
   // Live Guest Counts State
   const [counts, setCounts] = useState({ going: 0, notGoing: 0, maybe: 0, loading: true });
+
+  // iOS Safari Autoplay Fix
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch((err) => {
+        console.log('Autoplay deferred:', err);
+      });
+    }
+  }, []);
 
   // Helper to parse CSV rows correctly handling quoted strings
   const parseCsvRow = (text) => {
@@ -129,8 +142,8 @@ export default function EventsInvite() {
         title: "Sai & Vamsi's Haldi Ceremony",
         description: "Join us for the vibrant Haldi Ceremony of Sai Padmini & Vamsi Krishna at 8:30 AM.",
         location: "JRB Ranch House, 5500 FM 424, Cross Roads, TX 76227",
-        startTime: "20260828T083000", // Aug 28, 2026, 8:30 AM
-        endTime: "20260828T123000",   // Aug 28, 2026, 12:30 PM
+        startTime: "20260828T083000",
+        endTime: "20260828T123000",
         filename: "haldi-ceremony.ics"
       };
     } else {
@@ -138,8 +151,8 @@ export default function EventsInvite() {
         title: "Sai & Vamsi's Sangeeth Night",
         description: "Join us for an evening filled with music, dance, and celebrations at the Sangeeth of Sai Padmini & Vamsi Krishna at 7:00 PM.",
         location: "Minerva Banquet Hall, 3825 W Spring Creek Pkwy Ste 207, Plano, TX 75023",
-        startTime: "20260828T190000", // Aug 28, 2026, 7:00 PM
-        endTime: "20260828T230000",   // Aug 28, 2026, 11:00 PM
+        startTime: "20260828T190000",
+        endTime: "20260828T230000",
         filename: "sangeeth-night.ics"
       };
     }
@@ -203,49 +216,55 @@ export default function EventsInvite() {
   };
 
   return (
-    <main className="h-screen w-full relative flex flex-col justify-end font-sans overflow-hidden bg-[#e5eff7]">
+    <main className="h-screen w-full relative flex flex-col justify-end font-sans overflow-hidden bg-[#0d131a]">
       
-      {/* 1. Full-Bleed Video Background */}
+      {/* 1. Full-Bleed Video Background with iOS Autoplay and Control Hiding */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          className="w-full h-full object-cover object-top"
+          preload="auto"
+          className="w-full h-full object-cover object-top pointer-events-none [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-play-button]:hidden [&::-webkit-media-controls-start-playback-button]:hidden"
         >
           <source src="/events-bg.mp4" type="video/mp4" />
         </video>
+        {/* Subtle Dark Gradient at Bottom for UI Contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
       </div>
 
       {/* 2. Text & Controls */}
       <div 
-        className="relative z-10 w-full max-w-md mx-auto px-6 flex flex-col items-center text-center space-y-5 bg-transparent"
-        style={{ transform: 'translateY(-50px)' }}
+        className="relative z-10 w-full max-w-md mx-auto px-5 flex flex-col items-center text-center space-y-4 bg-transparent"
+        style={{ transform: 'translateY(-30px)' }}
       >
         
-        {/* Event Details Header */}
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.25em] font-bold text-amber-800 leading-relaxed">
+        {/* Event Details Frosted Glass Card */}
+        <div className="w-full bg-black/45 backdrop-blur-md border border-white/15 rounded-3xl p-5 shadow-2xl space-y-2 text-white">
+          <p className="text-[11px] uppercase tracking-[0.25em] font-bold text-amber-300">
             You&apos;re Invited
           </p>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-wide text-slate-900 leading-normal">
+          <h1 className="text-xl sm:text-2xl font-extrabold tracking-wide text-white leading-tight drop-shadow-md">
             Sai &amp; Vamsi&apos;s
-            <span className="block">Haldi and Sangeeth Event</span>
+            <span className="block text-amber-200">Haldi &amp; Sangeeth Event</span>
           </h1>
-          <p className="text-xs font-semibold text-slate-700 leading-relaxed pt-1">
-            Friday, August 28, 2026
-          </p>
-          <p className="text-[11px] font-medium text-slate-500 leading-relaxed">
-            Haldi 8:30 AM &bull; Sangeeth 7:00 PM
-          </p>
+          <div className="pt-1 space-y-0.5">
+            <p className="text-xs font-semibold text-slate-100">
+              Friday, August 28, 2026
+            </p>
+            <p className="text-[11px] font-medium text-amber-100/90">
+              Haldi 8:30 AM &bull; Sangeeth 7:00 PM
+            </p>
+          </div>
         </div>
 
         {/* Segmented RSVP Pill Bar */}
-        <div className="w-full bg-[#3d454e] backdrop-blur-md rounded-full p-2 border border-white/20 flex items-center justify-between shadow-xl">
+        <div className="w-full bg-[#252a30]/90 backdrop-blur-md rounded-full p-2 border border-white/20 flex items-center justify-between shadow-2xl">
           <button
             onClick={() => handleStatusSelect('Going')}
-            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all leading-relaxed ${
+            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
               status === 'Going' && activeModal === 'rsvp'
                 ? 'bg-white text-slate-900 shadow-md font-bold'
                 : 'text-slate-100 hover:text-white'
@@ -259,7 +278,7 @@ export default function EventsInvite() {
 
           <button
             onClick={() => handleStatusSelect('Not Going')}
-            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all leading-relaxed ${
+            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
               status === 'Not Going' && activeModal === 'rsvp'
                 ? 'bg-white text-slate-900 shadow-md font-bold'
                 : 'text-slate-100 hover:text-white'
@@ -273,7 +292,7 @@ export default function EventsInvite() {
 
           <button
             onClick={() => handleStatusSelect('Maybe')}
-            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all leading-relaxed ${
+            className={`flex-1 py-3 rounded-full text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition-all ${
               status === 'Maybe' && activeModal === 'rsvp'
                 ? 'bg-white text-slate-900 shadow-md font-bold'
                 : 'text-slate-100 hover:text-white'
@@ -287,7 +306,7 @@ export default function EventsInvite() {
         {/* View Event Details Button */}
         <button
           onClick={() => setActiveModal('details')}
-          className="w-full py-3.5 bg-[#4c545e] hover:bg-[#5b646d] text-white font-medium text-xs sm:text-sm rounded-2xl transition-all shadow-md leading-relaxed"
+          className="w-full py-3.5 bg-[#3a414a]/90 hover:bg-[#48515c] text-white font-medium text-xs sm:text-sm rounded-2xl transition-all shadow-xl backdrop-blur-sm border border-white/10"
         >
           View Event Details
         </button>
