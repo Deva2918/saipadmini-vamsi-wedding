@@ -21,10 +21,10 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-// 1. Google Form Submission Endpoint
+// 1. Google Form Submission Endpoint (Events Form)
 const FORM_ENDPOINT = 'https://docs.google.com/forms/d/e/1FAIpQLSeu6-TZUOmw4P-Kvey4yzQgT03ggnWL2Bue0xLjYydAQ6Nu_g/formResponse';
 
-// 2. Events Google Sheet CSV URL
+// 2. Events Google Sheet CSV URL (Live Responses Sheet)
 const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS168ea40QaGQwWRrRImmeUKay_FrvUOK5nuXtsFi84vzy06uwnJrkMCBnW-erchGNcWoZ69ORpXrxf/pub?gid=2093475087&single=true&output=csv';
 
 // 3. Google Maps URLs
@@ -42,7 +42,7 @@ export default function EventsInvite() {
   // Live Guest Counts State
   const [counts, setCounts] = useState({ going: 0, notGoing: 0, maybe: 0, loading: true });
 
-  // iOS Safari Autoplay Fix
+  // iOS Safari Autoplay Configuration
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.defaultMuted = true;
@@ -53,7 +53,7 @@ export default function EventsInvite() {
     }
   }, []);
 
-  // Helper to parse CSV rows correctly handling quoted strings
+  // Helper to parse CSV rows correctly handling quotes and commas
   const parseCsvRow = (text) => {
     const result = [];
     let cell = '';
@@ -74,7 +74,7 @@ export default function EventsInvite() {
     return result;
   };
 
-  // Helper to extract clean integer numbers
+  // Helper to extract clean numeric counts
   const parseGuestNumber = (val) => {
     if (!val) return 0;
     const cleanVal = val.replace(/"/g, '').trim();
@@ -218,7 +218,7 @@ export default function EventsInvite() {
   return (
     <main className="h-screen w-full relative flex flex-col justify-end font-sans overflow-hidden bg-[#0d131a]">
       
-      {/* 1. Full-Bleed Video Background with iOS Autoplay and Control Hiding */}
+      {/* 1. Full-Bleed Video Background with iOS Autoplay and Native Controls Hidden */}
       <div className="absolute inset-0 w-full h-full overflow-hidden z-0 pointer-events-none">
         <video
           ref={videoRef}
@@ -231,8 +231,8 @@ export default function EventsInvite() {
         >
           <source src="/events-bg.mp4" type="video/mp4" />
         </video>
-        {/* Subtle Dark Gradient at Bottom for UI Contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60 pointer-events-none" />
+        {/* Dark Gradient Overlay for Maximum Foreground Contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-black/60 pointer-events-none" />
       </div>
 
       {/* 2. Text & Controls */}
@@ -507,7 +507,7 @@ export default function EventsInvite() {
                       </div>
                       <input type="hidden" name="entry.1146164887" value={status} />
 
-                      {/* Full Name Input */}
+                      {/* Full Name Input (16px base font stops iOS auto-zoom) */}
                       <div className="relative">
                         <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input
